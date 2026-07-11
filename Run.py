@@ -19,7 +19,7 @@ torch.manual_seed(seed)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
-z_dim = 8
+z_dim = 25
 ann = 50
 bs = 100
 # MNIST Dataset
@@ -52,8 +52,7 @@ class ConvVAE(nn.Module):
             nn.ReLU(),
             nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
             nn.ReLU(),
-            nn.Conv2d(32, 1, kernel_size=3, stride=1, padding=1),
-            nn.Sigmoid()
+            nn.Conv2d(32, 1, kernel_size=3, stride=1, padding=1)
         )
 
     def encode(self, x):
@@ -121,7 +120,7 @@ optimizer = optim.Adam(vae.parameters())
 # return reconstruction error + KL divergence losses
 def loss_function(recon_x, x, mu, log_var,bate =1.0):
     BCE = F.binary_cross_entropy(
-        recon_x.view(-1, 784), x.view(-1, 784), reduction='sum'
+        recon_x, x, reduction='sum'
     )
     KLD = -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())
     return BCE + KLD*bate
