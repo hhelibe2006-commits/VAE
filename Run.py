@@ -52,7 +52,8 @@ class ConvVAE(nn.Module):
             nn.ReLU(),
             nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),
             nn.ReLU(),
-            nn.Conv2d(32, 1, kernel_size=3, stride=1, padding=1)
+            nn.Conv2d(32, 1, kernel_size=3, stride=1, padding=1),
+            nn.Sigmoid()
         )
 
     def encode(self, x):
@@ -166,6 +167,6 @@ for epoch in range(1, 200):
 
 with torch.no_grad():
     z = torch.randn(64, z_dim).to(device)
-    sample = vae.decode(z).to(device)
+    sample = vae.decode(z).cpu()
     
     save_image(sample.view(64, 1, 28, 28), './samples/sample_' + '.png')
