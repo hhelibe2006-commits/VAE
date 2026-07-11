@@ -20,7 +20,7 @@ torch.manual_seed(seed)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
 z_dim = 30
-ann = 100
+ann = 20
 bs = 100
 # MNIST Dataset
 train_dataset = datasets.MNIST(root='./mnist_data/', train=True, transform=transforms.ToTensor(), download=True)
@@ -161,7 +161,7 @@ def test():
     test_loss /= len(test_loader.dataset)
     print('====> Test set loss: {:.4f}'.format(test_loss))
 
-for epoch in range(1, 200):
+for epoch in range(1, 70):
     train(epoch)
     test()
 
