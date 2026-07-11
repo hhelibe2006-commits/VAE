@@ -19,7 +19,7 @@ torch.manual_seed(seed)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
-z_dim = 30
+z_dim = 16
 ann = 20
 bs = 100
 # MNIST Dataset
@@ -85,17 +85,17 @@ class VAE(nn.Module):
         
         # encoder part
         self.fc1 = nn.Linear(x_dim, h_dim1)
-        self.fc2 = nn.Linear(h_dim1, h_dim2)
-        self.fc31 = nn.Linear(h_dim2, z_dim)
-        self.fc32 = nn.Linear(h_dim2, z_dim)
+        #self.fc2 = nn.Linear(h_dim1, h_dim2)
+        self.fc31 = nn.Linear(h_dim1, z_dim)
+        self.fc32 = nn.Linear(h_dim1, z_dim)
         # decoder part
-        self.fc4 = nn.Linear(z_dim, h_dim2)
-        self.fc5 = nn.Linear(h_dim2, h_dim1)
+        self.fc4 = nn.Linear(z_dim, h_dim1)
+        #self.fc5 = nn.Linear(h_dim2, h_dim1)
         self.fc6 = nn.Linear(h_dim1, x_dim)
         
     def encoder(self, x):
         h = F.relu(self.fc1(x))
-        h = F.relu(self.fc2(h))
+        #h = F.relu(self.fc2(h))
         return self.fc31(h), self.fc32(h) # mu, log_var
     
     def sampling(self, mu, log_var):
@@ -105,7 +105,7 @@ class VAE(nn.Module):
         
     def decoder(self, z):
         h = F.relu(self.fc4(z))
-        h = F.relu(self.fc5(h))
+        #h = F.relu(self.fc5(h))
         return F.sigmoid(self.fc6(h)) 
     
     def forward(self, x):
@@ -114,12 +114,12 @@ class VAE(nn.Module):
         return self.decoder(z), mu, log_var
 
 # build model
-#vae = VAE(x_dim=784, h_dim1= 512, h_dim2=256, z_dim=z_dim).to(device)
-vae = ConvVAE(latent_dim=z_dim).to(device)
+vae = VAE(x_dim=784, h_dim1= 512, h_dim2=256, z_dim=z_dim).to(device)
+#vae = ConvVAE(latent_dim=z_dim).to(device)
 optimizer = optim.Adam(vae.parameters())
 
 # return reconstruction error + KL divergence losses
-def loss_function(recon_x, x, mu, log_var,bate =1.0):
+def loss_function(recon_x, x.view(-1, 784), mu, log_var,bate =1.0):
     BCE = F.binary_cross_entropy(
         recon_x, x, reduction='sum'
     )
