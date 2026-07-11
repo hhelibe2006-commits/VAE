@@ -19,7 +19,7 @@ torch.manual_seed(seed)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
-z_dim = 16
+z_dim = 8
 ann = 50
 bs = 100
 # MNIST Dataset
@@ -129,7 +129,7 @@ def loss_function(recon_x, x, mu, log_var,bate =1.0):
 def train(epoch):
     vae.train()
     train_loss = 0
-    bate = min(2.0, epoch / ann)
+    bate = min(1.0, epoch / ann)
     for batch_idx, (data, _) in enumerate(train_loader):
         data = data.to(device)
         optimizer.zero_grad()
