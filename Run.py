@@ -119,9 +119,9 @@ vae = VAE(x_dim=784, h_dim1= 512, h_dim2=256, z_dim=z_dim).to(device)
 optimizer = optim.Adam(vae.parameters())
 
 # return reconstruction error + KL divergence losses
-def loss_function(recon_x, x.view(-1, 784), mu, log_var,bate =1.0):
+def loss_function(recon_x, x, mu, log_var,bate =1.0):
     BCE = F.binary_cross_entropy(
-        recon_x, x, reduction='sum'
+        recon_x, x.view(-1, 784), reduction='sum'
     )
     KLD = -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())
     return BCE + KLD*bate
