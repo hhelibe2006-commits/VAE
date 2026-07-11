@@ -1,0 +1,32 @@
+name: mac
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build-and-pack:
+    runs-on: macos-latest
+    steps:
+     - name: code
+       uses: actions/checkout@v4
+       with:
+         lfs: true
+
+     - name: python
+       uses: actions/setup-python@v5
+       with:
+         python-version: '3.14.4'
+
+     - name: install
+       run: |
+         pip install .
+
+     - name: yun
+       run: |
+         python Run.py
+
+     - name: img_aligen_celeba
+       uses: actions/upload-artifact@v4
+       with:
+         name: VAE
+         path: img_align_celeba/
