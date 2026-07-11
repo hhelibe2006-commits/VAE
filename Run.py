@@ -19,7 +19,7 @@ torch.manual_seed(seed)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu")
-z_dim = 25
+z_dim = 8
 ann = 50
 bs = 100
 # MNIST Dataset
