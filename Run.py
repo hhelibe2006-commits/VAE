@@ -167,6 +167,6 @@ for epoch in range(1, 70):
 
 with torch.no_grad():
     z = torch.randn(64, z_dim).to(device)
-    sample = vae.decode(z).cpu()
+    sample = vae.decoder(z).cpu()
     
     save_image(sample.view(64, 1, 28, 28), './samples/sample_' + '.png')
